@@ -19,10 +19,7 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true,
-    "baseUrl": "./",
-    "paths": {
-      "@idgate/shared": ["../shared/src"]
-    }
+    "baseUrl": "./"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

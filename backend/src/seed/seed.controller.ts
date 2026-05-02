@@ -5,15 +5,13 @@ import { SeedService } from './seed.service';
 
 @ApiTags('Seed')
 @Controller('seed')
-@UseGuards(JwtAuthGuard)
-@ApiBearerAuth()
 export class SeedController {
   constructor(private seedService: SeedService) {}
 
   @Post()
   @ApiOperation({ summary: 'Seed sample data (posts + messages)' })
-  async seedAll(@Request() req: any) {
-    const result = await this.seedService.seedAll(req.user.id, req.user);
+  async seedAll() {
+    const result = await this.seedService.seedBootstrap();
     return { success: true, data: result };
   }
 }

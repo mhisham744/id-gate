@@ -22,6 +22,14 @@ export class SeedService {
     private orgRepo: Repository<OrganizationEntity>,
   ) {}
 
+  async seedBootstrap() {
+    const dummyUserId = 'seed-user-001';
+    const dummyUser = { firstName: 'Demo', lastName: 'User' };
+    const orgCreated = await this.seedOrganization(dummyUserId);
+    const postsCreated = await this.seedPosts(dummyUserId, dummyUser);
+    return { postsCreated, orgCreated };
+  }
+
   async seedAll(userId: string, user: any) {
     const orgCreated = await this.seedOrganization(userId);
     const postsCreated = await this.seedPosts(userId, user);
