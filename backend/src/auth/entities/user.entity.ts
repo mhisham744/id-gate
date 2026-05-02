@@ -59,6 +59,9 @@ export class UserEntity {
   @Column({ default: false })
   isEmailVerified: boolean;
 
+  @Column({ default: 'personal' })
+  accountType: string; // 'personal' | 'organization'
+
   @Column({ nullable: true })
   refreshToken: string;
 

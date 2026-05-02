@@ -41,6 +41,11 @@ export class RegisterDto {
   @IsOptional()
   country?: string;
 
+  @ApiProperty({ example: 'personal', required: false })
+  @IsString()
+  @IsOptional()
+  accountType?: string;
+
   @ApiProperty({ example: 'SecurePass123!' })
   @IsString()
   @MinLength(8)

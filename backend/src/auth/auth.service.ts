@@ -108,6 +108,7 @@ export class AuthService {
         phoneNumber: user.phoneNumber,
         email: user.email,
         profilePhotoUrl: user.profilePhotoUrl,
+        accountType: user.accountType,
       },
     };
   }
