@@ -1,0 +1,64 @@
+{
+  "expo": {
+    "name": "IDGate",
+    "slug": "idgate",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "scheme": "idgate",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1a73e8"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.idgate.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "IDGate needs camera access to take photos and scan documents.",
+        "NSPhotoLibraryUsageDescription": "IDGate needs photo library access to share images.",
+        "NSLocationWhenInUseUsageDescription": "IDGate needs location access for reminders and emergency services.",
+        "NSMicrophoneUsageDescription": "IDGate needs microphone access for voice messages."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#1a73e8"
+      },
+      "package": "com.idgate.app",
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "RECORD_AUDIO"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-secure-store",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow IDGate to use your location for reminders and emergency services."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#1a73e8"
+        }
+      ]
+    ],
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "favicon": "./assets/icon.png"
+    }
+  }
+}

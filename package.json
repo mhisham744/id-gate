@@ -1,0 +1,20 @@
+{
+  "name": "idgate",
+  "version": "0.1.0",
+  "private": true,
+  "description": "IDGate - Identity-verified communication platform",
+  "workspaces": [
+    "backend",
+    "shared"
+  ],
+  "scripts": {
+    "backend:dev": "cd backend && npm run start:dev",
+    "mobile:start": "cd mobile && npx expo start",
+    "mobile:ios": "cd mobile && npx expo run:ios",
+    "mobile:android": "cd mobile && npx expo run:android",
+    "shared:build": "cd shared && npm run build"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
