@@ -199,7 +199,7 @@ graph TB
         EDU[Education<br/>School → University → Postgraduate → PhD<br/>Training & Courses, Specialties]
         CAR[Career<br/>History, Profession, Title, Field, Industry]
         VAC[Vacancy Settings<br/>Notifications, Criteria]
-        PRIV[Privacy<br/>Personal | Contact | Education | Career]
+        PRIV[Privacy<br/>Personal, Contact, Education, Career]
         ATTR[Attributes 1-5<br/>Custom fields]
     end
 
