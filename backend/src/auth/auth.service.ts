@@ -39,6 +39,7 @@ export class AuthService {
       ...userData,
       idCode,
       passwordHash,
+      fullName: `${dto.firstName} ${dto.lastName}`.trim(),
       status: 'active',
       isPhoneVerified: true, // Assuming OTP was already verified
     });

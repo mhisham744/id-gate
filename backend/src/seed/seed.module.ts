@@ -1,14 +1,21 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SeedController } from './seed.controller';
 import { SeedService } from './seed.service';
-import { FeedPostEntity } from '../feed/entities/feed-post.entity';
-import { ConversationEntity } from '../communication/entities/conversation.entity';
-import { MessageEntity } from '../communication/entities/message.entity';
+import { SeedController } from './seed.controller';
+import { UserEntity } from '../auth/entities/user.entity';
 import { OrganizationEntity } from '../entities/entities/organization.entity';
+import { PositionEntity } from '../entities/entities/position.entity';
+import { OrgStructureNodeEntity } from '../entities/entities/org-structure-node.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([FeedPostEntity, ConversationEntity, MessageEntity, OrganizationEntity])],
+  imports: [
+    TypeOrmModule.forFeature([
+      UserEntity,
+      OrganizationEntity,
+      PositionEntity,
+      OrgStructureNodeEntity,
+    ]),
+  ],
   controllers: [SeedController],
   providers: [SeedService],
 })

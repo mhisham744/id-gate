@@ -2,14 +2,6 @@
 // IDGate Shared Types - Identity & Entity Models
 // ============================================================
 
-// --- Enums ---
-
-export enum EntityType {
-  NATURAL = 'natural',       // الشخصية الطبيعية - Real person
-  VIRTUAL = 'virtual',       // الشخصية الافتراضية - Position/role
-  LEGAL = 'legal',           // الشخصية الاعتبارية - Organization
-}
-
 export enum AccountStatus {
   ACTIVE = 'active',
   INACTIVE = 'inactive',
@@ -18,227 +10,290 @@ export enum AccountStatus {
 }
 
 export enum LinkStatus {
-  PENDING = 'pending',       // Link request sent, awaiting approval
-  ACTIVE = 'active',         // Link approved and active
-  UNLINKED = 'unlinked',     // Link was removed
-  BLOCKED = 'blocked',       // Link was blocked
+  VACANT = 'vacant',
+  PENDING = 'pending',
+  ACTIVE = 'active',
+  UNLINKED = 'unlinked',
+  BLOCKED = 'blocked',
 }
 
-export enum PositionLinkDirection {
-  ORG_TO_PERSON = 'org_to_person',   // Organization requests link with person
-  PERSON_ACCEPTS = 'person_accepts', // Person accepts the link
+export enum PrivacyLevel {
+  PUBLIC = 'public',
+  CONTACTS = 'contacts',
+  CLOSED = 'closed',
 }
 
-export enum Gender {
-  MALE = 'male',
-  FEMALE = 'female',
-  PREFER_NOT_TO_SAY = 'prefer_not_to_say',
+export enum OrgStructureType {
+  ORGANIZATIONAL = 'organizational',
+  MANAGEMENT = 'management',
+  FUNCTION = 'function',
+  GEOGRAPHICAL = 'geographical',
 }
 
-// --- Natural Character (Real Person) ---
+// --- Natural Character (Real Person / User) ---
 
 export interface NaturalCharacter {
   id: string;
-  idCode: string;            // Unique IDGate code (IDG-XXXXXXXXXX)
+  idCode: string;
+  accountType: string;
   status: AccountStatus;
 
-  // Personal Information
+  // Personal
   firstName: string;
   lastName: string;
-  gender: Gender;
-  dateOfBirth: string;       // ISO date
-  nationality: string;
-  additionalNationalities?: string[];
+  fullName: string;
+  gender?: string;
+  dateOfBirth?: string;
+  nationality1?: string;
+  nationality2?: string;
+  nationality3?: string;
+  nationality4?: string;
+  residenceCountry?: string;
+  city?: string;
+  address1?: string;
+  address2?: string;
+  address3?: string;
   profilePhotoUrl?: string;
+
+  // Documents
+  nationalId?: string;
+  passport1?: string;
+  passport2?: string;
+  passport3?: string;
+  passport4?: string;
+  drivingLicense?: string;
 
   // Contact
   email: string;
-  phoneNumber: string;       // Primary phone (linked to identity)
-  mobileNumber?: string;
+  phoneNumber: string;
+  landlineNumber?: string;
+  linkedIn?: string;
+  facebook?: string;
+  whatsApp?: string;
 
-  // Address
-  address?: string;
-  city?: string;
-  country: string;
-  residenceCountry?: string;
+  // Languages
+  motherTongue?: string;
+  language1?: string;
+  language1Proficiency?: string;
+  language2?: string;
+  language2Proficiency?: string;
+  language3?: string;
+  language3Proficiency?: string;
+  language4?: string;
+  language4Proficiency?: string;
 
   // Education
-  education?: Education[];
+  school?: string;
+  university?: string;
+  postgraduate?: string;
+  phd?: string;
+  trainingAndCourses?: any[];
+  specialtiesAndSkills?: any[];
 
   // Career
-  career?: CareerEntry[];
+  careerHistory?: any[];
+  profession?: string;
+  title?: string;
+  field?: string;
+  industry?: string;
+  careerCountry?: string;
 
-  // Skills & Languages
-  specialties?: string[];
-  languages?: Language[];
+  // Vacancy
+  vacancyNotificationEnabled?: boolean;
+  vacancyCriteria?: any;
 
   // Privacy
-  privacySettings: PrivacySettings;
+  privacyPersonalInfo?: PrivacyLevel;
+  privacyContactInfo?: PrivacyLevel;
+  privacyEducation?: PrivacyLevel;
+  privacyCareer?: PrivacyLevel;
 
-  // CV
-  cvUrl?: string;
-  cvVisibility: 'open' | 'closed';
+  // Attributes
+  attribute1?: string;
+  attribute2?: string;
+  attribute3?: string;
+  attribute4?: string;
+  attribute5?: string;
 
-  // Vacancy notification preferences
-  vacancyNotification: boolean;
-  vacancyCriteria?: VacancyCriteria;
-
-  // Linked virtual characters (positions)
-  linkedPositions: string[];  // IDs of VirtualCharacter
+  isPhoneVerified: boolean;
+  isEmailVerified: boolean;
 
   createdAt: string;
   updatedAt: string;
-}
-
-export interface Education {
-  university: string;
-  degree: string;
-  graduationYear: number;
-  postgraduate?: string;
-  field?: string;
-}
-
-export interface CareerEntry {
-  jobTitle: string;
-  organizationId?: string;   // Link to LegalEntity
-  organizationName: string;
-  organizationLevel?: string;
-  industry?: string;
-  startDate: string;
-  endDate?: string;          // null if current
-  isCurrent: boolean;
-}
-
-export interface Language {
-  name: string;
-  proficiency: 'basic' | 'intermediate' | 'fluent' | 'native';
-}
-
-export interface PrivacySettings {
-  profileVisibility: 'open' | 'contacts_only' | 'closed';
-  showEmail: boolean;
-  showPhone: boolean;
-  showCareer: boolean;
-  showEducation: boolean;
-}
-
-export interface VacancyCriteria {
-  targetJobTitles?: string[];
-  targetCareerLevel?: string[];
-  targetIndustry?: string[];
-  targetCountry?: string[];
-  targetResidenceCountry?: string[];
 }
 
 // --- Virtual Character (Position) ---
 
 export interface VirtualCharacter {
   id: string;
-  idCode: string;            // Unique IDGate code for this position
-  status: AccountStatus;
+  idCode: string;
 
-  // Position info
-  positionTitle: string;
-  positionRef: string;       // Organization's reference code
-  description?: string;
+  positionName: string;
+  positionName1?: string;
+  positionName2?: string;
+  positionName3?: string;
+  positionDescription?: string;
+  positionCode?: string;
 
-  // Links
-  legalEntityId: string;     // The organization this position belongs to
-  linkedNaturalId?: string;  // The person currently holding this position
+  // Languages
+  language1?: string;
+  language2?: string;
+  language3?: string;
+  language4?: string;
+
+  // Contact
+  mobileNumber?: string;
+  telephoneNumber?: string;
+  emailAddress?: string;
+
+  // Structure
+  organizationId: string;
+  orgStructureNodeId?: string;
+  managementStructureNodeId?: string;
+  functionStructureNodeId?: string;
+  geographicalStructureNodeId?: string;
+
+  // Authorization
+  positionProfile?: any;
+  delegationSubjects?: any[];
+  delegationLimits?: any[];
+  canDelegateOthers?: boolean;
+  delegationDuration?: number;
+  delegationStartDate?: string;
+  delegationEndDate?: string;
+  displayHistory?: boolean;
+  locationPrivacy?: PrivacyLevel;
+  locationTrackingEnabled?: boolean;
+
+  // Linking
+  linkedNaturalId?: string;
   linkStatus: LinkStatus;
-
-  // Organization level reference
-  orgLevelCode: string;      // Where in the org structure this sits
-
-  // Authorization profile
-  authorizationProfile: AuthorizationProfile;
-
-  // Location tracking (for emergency services etc.)
-  locationTrackingEnabled: boolean;
+  linkedAt?: string;
+  unlinkedAt?: string;
 
   createdAt: string;
   updatedAt: string;
-  linkedAt?: string;         // When person was linked
-  unlinkedAt?: string;       // When person was unlinked
-}
-
-export interface AuthorizationProfile {
-  canCreateTeams: boolean;
-  canCreateGroups: boolean;
-  canCreateBroadcasts: boolean;
-  canCreateMeetings: boolean;
-  canCreateConferences: boolean;
-  canCreateTasks: boolean;
-  canCreateCalendarEvents: boolean;
-  canCreateProjects: boolean;
-  canManageMasterData: boolean;
-  canManageTransactions: boolean;
-  customPermissions: Record<string, boolean>;
 }
 
 // --- Legal Entity (Organization) ---
 
 export interface LegalEntity {
   id: string;
-  idCode: string;            // Unique IDGate code for this organization
+  idCode: string;
   status: AccountStatus;
 
-  // Organization info
+  // Names
   formalName: string;
   commercialName?: string;
-  registrationNumber?: string; // e.g., commercial register number
+  searchName?: string;
+  domainName?: string;
+  name1?: string;
+  name2?: string;
+  name3?: string;
+  name4?: string;
+  name5?: string;
 
-  // Contact
+  // Legal
+  orgLevel?: string;
+  orgType?: string;
+  legalEntityType?: string;
+  dateOfOperation?: string;
+
+  // Registration
+  countryOfRegistration?: string;
+  cityOfRegistration?: string;
+  registrationAddress?: string;
+  headquarterAddress?: string;
+
+  // Operation
+  operationAddress?: string;
+  operationDistrict?: string;
+  operationCountry?: string;
+  operationRegion?: string;
+  operationPostalCode?: string;
+  operationLanguage?: string;
+  secondLanguage?: string;
+  timeZone?: string;
+  address1?: string;
+  address2?: string;
+  address3?: string;
+  address4?: string;
+  address5?: string;
+
+  // Registration docs
+  commercialRegistrationNumber?: string;
+  taxCardNumber?: string;
+  manufacturingRegistrationNumber?: string;
+  vatRegistrationNumber?: string;
+
+  // Contacts
   email?: string;
   website?: string;
   phoneNumber?: string;
+  mobileNumber?: string;
+  faxNumber?: string;
 
-  // Address
-  address?: string;
-  city?: string;
-  country: string;
-
-  // Business
-  industry?: string;
+  // Field
+  mainIndustry?: string;
+  subsidiaryIndustries?: string[];
   brands?: string[];
   products?: string[];
 
   // Structure
-  orgStructure: OrgLevel[];
-  positions: string[];        // IDs of VirtualCharacter
+  holdingCompanyId?: string;
+  parentBranchId?: string;
+  sisterCompanyIds?: string[];
+  affiliatedCompanyIds?: string[];
+  branchIds?: string[];
+  adminIds: string[];
 
-  // Admin
-  adminIds: string[];         // IDs of NaturalCharacter who are admins
+  // Formal
+  ceoUserId?: string;
+  delegationSubjects?: any[];
 
-  // The admin has:
-  // - Authority to create positions and link them to natural persons
-  // - Master data management only
-  // - NO communication privileges directly (must act through positions)
-  // - NO team/group/meeting/conference/calendar/task participation
+  // Privacy
+  privacyCorporateInfo?: PrivacyLevel;
+  privacyContactInfo?: PrivacyLevel;
+  privacyFieldOfOperation?: PrivacyLevel;
+  privacyStructureInfo?: PrivacyLevel;
 
   createdAt: string;
   updatedAt: string;
 }
 
-export interface OrgLevel {
+// --- Org Structure Node ---
+
+export interface OrgStructureNode {
   id: string;
-  code: string;              // e.g., BL1000
+  organizationId: string;
+  structureType: OrgStructureType;
   name: string;
-  parentId?: string;         // Parent org level
-  level: number;             // Depth in hierarchy
-  type: OrgLevelType;
-  children?: OrgLevel[];
-  positionIds: string[];     // Positions at this level
+  description?: string;
+  level: number;
+  code?: string;
+  sortOrder?: number;
+  positionIds?: string[];
+  parentId?: string;
+  children?: OrgStructureNode[];
+  createdAt: string;
+  updatedAt: string;
 }
 
-export enum OrgLevelType {
-  ORGANIZATION = 'organization',
-  COMPANY = 'company',
-  BRANCH = 'branch',
-  UNIT = 'unit',
-  DEPARTMENT = 'department',
-  SECTION = 'section',
-  AREA = 'area',
-  FUNCTION = 'function',
-  GROUP = 'group',
+// --- Notification ---
+
+export interface Notification {
+  id: string;
+  recipientId: string;
+  recipientType: 'natural' | 'virtual';
+  type: string;
+  title: string;
+  body?: string;
+  data?: any;
+  senderId?: string;
+  senderName?: string;
+  senderType?: string;
+  isRead: boolean;
+  isActioned: boolean;
+  actionResult?: string;
+  createdAt: string;
 }

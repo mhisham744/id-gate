@@ -67,8 +67,8 @@ export default function VerifyOtpScreen() {
         lastName: params.lastName as string,
         gender: (params.gender as string) || 'prefer_not_to_say',
         dateOfBirth: (params.dateOfBirth as string) || '',
-        nationality: (params.nationality as string) || '',
-        country: (params.country as string) || '',
+        nationality1: (params.nationality1 as string) || '',
+        residenceCountry: (params.residenceCountry as string) || '',
         password: params.password as string,
         accountType: (params.type as 'personal' | 'organization') || 'personal',
       });

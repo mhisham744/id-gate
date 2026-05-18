@@ -38,10 +38,7 @@ export default function AddOrganizationScreen() {
     setIsSearching(true);
     try {
       // Try searching by code first, then by name
-      const response = await entityService.search({
-        query: orgCode.trim() || orgName.trim(),
-        type: 'organization',
-      } as any);
+      const response = await entityService.searchOrganizations(orgCode.trim() || orgName.trim());
       if (response.success && response.data && response.data.length > 0) {
         setFoundOrg(response.data[0]);
         setStep('details');
@@ -177,13 +174,13 @@ export default function AddOrganizationScreen() {
           {foundOrg?.industry && (
             <View style={styles.metaChip}>
               <Ionicons name="layers-outline" size={12} color={colors.textSecondary} />
-              <Text style={styles.metaChipText}>{foundOrg.industry}</Text>
+              <Text style={styles.metaChipText}>{foundOrg.mainIndustry}</Text>
             </View>
           )}
-          {foundOrg?.country && (
+          {foundOrg?.countryOfRegistration && (
             <View style={styles.metaChip}>
               <Ionicons name="location-outline" size={12} color={colors.textSecondary} />
-              <Text style={styles.metaChipText}>{foundOrg.country}</Text>
+              <Text style={styles.metaChipText}>{foundOrg.countryOfRegistration}</Text>
             </View>
           )}
         </View>

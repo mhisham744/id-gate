@@ -109,20 +109,20 @@ export default function OrganizationDetailScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>DETAILS</Text>
           <View style={styles.sectionCard}>
-            {org.industry && (
-              <InfoRow icon="layers-outline" label="Industry" value={org.industry} />
+            {org.mainIndustry && (
+              <InfoRow icon="layers-outline" label="Industry" value={org.mainIndustry} />
             )}
-            {org.country && (
-              <InfoRow icon="globe-outline" label="Country" value={org.country} />
+            {org.countryOfRegistration && (
+              <InfoRow icon="globe-outline" label="Country" value={org.countryOfRegistration} />
             )}
-            {org.city && (
-              <InfoRow icon="location-outline" label="City" value={org.city} />
+            {org.cityOfRegistration && (
+              <InfoRow icon="location-outline" label="City" value={org.cityOfRegistration} />
             )}
-            {org.address && (
-              <InfoRow icon="map-outline" label="Address" value={org.address} last={!org.registrationNumber} />
+            {org.registrationAddress && (
+              <InfoRow icon="map-outline" label="Address" value={org.registrationAddress} last={!org.commercialRegistrationNumber} />
             )}
-            {org.registrationNumber && (
-              <InfoRow icon="document-text-outline" label="Registration" value={org.registrationNumber} last />
+            {org.commercialRegistrationNumber && (
+              <InfoRow icon="document-text-outline" label="Registration" value={org.commercialRegistrationNumber} last />
             )}
           </View>
         </View>

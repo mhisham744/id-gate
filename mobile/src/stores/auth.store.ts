@@ -35,8 +35,8 @@ interface AuthState {
     lastName: string;
     gender: string;
     dateOfBirth: string;
-    nationality: string;
-    country: string;
+    nationality1: string;
+    residenceCountry: string;
     password: string;
     accountType?: 'personal' | 'organization';
   }) => Promise<void>;

@@ -28,8 +28,8 @@ export default function RegisterScreen() {
     email: '',
     password: '',
     confirmPassword: '',
-    nationality: '',
-    country: '',
+    nationality1: '',
+    residenceCountry: '',
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -167,8 +167,8 @@ export default function RegisterScreen() {
               <>
                 {renderInput('person-outline', 'First name', 'firstName', { autoComplete: 'given-name' })}
                 {renderInput('person-outline', 'Last name', 'lastName', { autoComplete: 'family-name' })}
-                {renderInput('flag-outline', 'Nationality', 'nationality')}
-                {renderInput('globe-outline', 'Country of residence', 'country')}
+                {renderInput('flag-outline', 'Nationality', 'nationality1')}
+                {renderInput('globe-outline', 'Country of residence', 'residenceCountry')}
               </>
             )}
             {step === 2 && (

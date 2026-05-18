@@ -21,25 +21,30 @@ export class RegisterDto {
   @IsNotEmpty()
   lastName: string;
 
-  @ApiProperty({ example: 'male' })
+  @ApiProperty({ example: 'male', required: false })
   @IsString()
   @IsOptional()
   gender?: string;
 
-  @ApiProperty({ example: '1990-01-15' })
+  @ApiProperty({ example: '1990-01-15', required: false })
   @IsString()
   @IsOptional()
   dateOfBirth?: string;
 
-  @ApiProperty({ example: 'Egyptian' })
+  @ApiProperty({ example: 'Egyptian', required: false })
   @IsString()
   @IsOptional()
-  nationality?: string;
+  nationality1?: string;
 
-  @ApiProperty({ example: 'Egypt' })
+  @ApiProperty({ example: 'Egypt', required: false })
   @IsString()
   @IsOptional()
-  country?: string;
+  residenceCountry?: string;
+
+  @ApiProperty({ example: 'Cairo', required: false })
+  @IsString()
+  @IsOptional()
+  city?: string;
 
   @ApiProperty({ example: 'personal', required: false })
   @IsString()

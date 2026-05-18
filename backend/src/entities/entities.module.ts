@@ -4,7 +4,7 @@ import { EntitiesController } from './entities.controller';
 import { EntitiesService } from './entities.service';
 import { OrganizationEntity } from './entities/organization.entity';
 import { PositionEntity } from './entities/position.entity';
-import { OrgLevelEntity } from './entities/org-level.entity';
+import { OrgStructureNodeEntity } from './entities/org-structure-node.entity';
 import { UserEntity } from '../auth/entities/user.entity';
 
 @Module({
@@ -12,7 +12,7 @@ import { UserEntity } from '../auth/entities/user.entity';
     TypeOrmModule.forFeature([
       OrganizationEntity,
       PositionEntity,
-      OrgLevelEntity,
+      OrgStructureNodeEntity,
       UserEntity,
     ]),
   ],

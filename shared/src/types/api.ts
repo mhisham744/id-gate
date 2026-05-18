@@ -11,9 +11,10 @@ export interface RegisterRequest {
   lastName: string;
   gender: string;
   dateOfBirth: string;
-  nationality: string;
-  country: string;
+  nationality1: string;
+  residenceCountry: string;
   password: string;
+  accountType?: string;
 }
 
 export interface VerifyOtpRequest {
@@ -110,7 +111,7 @@ export interface SearchResult {
   metadata?: Record<string, string>;
 }
 
-// --- Notifications ---
+// --- Notifications (see entities.ts for Notification interface) ---
 
 export enum NotificationType {
   CONTACT_REQUEST = 'contact_request',
@@ -127,17 +128,4 @@ export enum NotificationType {
   CALENDAR_EVENT = 'calendar_event',
   REMINDER = 'reminder',
   VACANCY_MATCH = 'vacancy_match',
-}
-
-export interface Notification {
-  id: string;
-  type: NotificationType;
-  title: string;
-  body: string;
-  recipientId: string;
-  senderId?: string;
-  referenceId?: string;        // ID of related entity
-  referenceType?: string;
-  isRead: boolean;
-  createdAt: string;
 }

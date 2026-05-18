@@ -51,11 +51,11 @@ export default function OrganizationsScreen() {
           <Text style={styles.orgCommercial} numberOfLines={1}>{item.commercialName}</Text>
         )}
         <View style={styles.orgMeta}>
-          {item.industry && (
-            <Text style={styles.orgMetaText}>{item.industry}</Text>
+          {item.mainIndustry && (
+            <Text style={styles.orgMetaText}>{item.mainIndustry}</Text>
           )}
-          {item.country && (
-            <Text style={styles.orgMetaText}>{item.country}</Text>
+          {item.countryOfRegistration && (
+            <Text style={styles.orgMetaText}>{item.countryOfRegistration}</Text>
           )}
         </View>
       </View>
