@@ -234,7 +234,7 @@ graph TB
         OPS[Operations<br/>Address, District, Country, Region<br/>Language, Second Language, Timezone]
         DOCS[Registration Docs<br/>Commercial Reg., Tax Card<br/>Manufacturing Reg., VAT Number]
         CONTS[Contacts<br/>Email, Website, Phone, Mobile, Fax]
-        FIELD[Field of Operation<br/>Main Industry, Subsidiaries<br/>Brands[], Products[]]
+        FIELD[Field of Operation<br/>Main Industry, Subsidiaries<br/>Brands, Products]
         STRUCT[Structure Relations<br/>Holding Company, Parent Branch<br/>Sister Companies, Affiliates, Branches]
         FORMAL[Formal<br/>CEO User, Delegation Subjects]
     end
