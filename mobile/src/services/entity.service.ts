@@ -28,6 +28,11 @@ export const entityService = {
     return response.data;
   },
 
+  getAdminPositions: async () => {
+    const response = await api.get('/entities/positions/admin');
+    return response.data;
+  },
+
   getPendingPositionLinks: async () => {
     const response = await api.get('/entities/positions/pending');
     return response.data;
@@ -55,6 +60,11 @@ export const entityService = {
 
   linkPositionToPerson: async (positionId: string, personId: string) => {
     const response = await api.post(`/entities/positions/${positionId}/link`, { personId });
+    return response.data;
+  },
+
+  searchPersonalUsers: async (query: string) => {
+    const response = await api.get('/entities/search/personal-users', { params: { q: query } });
     return response.data;
   },
 
@@ -86,6 +96,16 @@ export const entityService = {
 
   searchOrganizations: async (query: string) => {
     const response = await api.get('/entities/organizations/search', { params: { q: query } });
+    return response.data;
+  },
+
+  createJoinRequest: async (orgId: string, data: { message?: string; selectedStructure?: any; requestedPositionId?: string }) => {
+    const response = await api.post(`/entities/organizations/${orgId}/join-request`, data);
+    return response.data;
+  },
+
+  getMyJoinRequests: async () => {
+    const response = await api.get('/entities/join-requests/me');
     return response.data;
   },
 

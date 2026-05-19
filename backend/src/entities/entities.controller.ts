@@ -82,10 +82,22 @@ export class EntitiesController {
     return this.entitiesService.getUserPositions(req.user.id);
   }
 
+  @Get('positions/admin')
+  @ApiOperation({ summary: 'Get all positions in orgs where I am admin' })
+  async getAdminPositions(@Request() req: any) {
+    return this.entitiesService.getAdminPositions(req.user.id);
+  }
+
   @Get('positions/pending')
   @ApiOperation({ summary: 'Get pending position link requests for me' })
   async getPendingPositionLinks(@Request() req: any) {
     return this.entitiesService.getPendingPositionLinks(req.user.id);
+  }
+
+  @Get('search/personal-users')
+  @ApiOperation({ summary: 'Search non-organization users (for position linking)' })
+  async searchPersonalUsers(@Query('q') query: string) {
+    return this.entitiesService.searchPersonalUsers(query || '');
   }
 
   @Post('organizations/:orgId/positions')
@@ -182,5 +194,41 @@ export class EntitiesController {
   async deleteStructureNode(@Request() req: any, @Param('nodeId') nodeId: string) {
     await this.entitiesService.deleteStructureNode(req.user.id, nodeId);
     return { success: true };
+  }
+
+  // ═══════════════════════════════════════
+  // JOIN REQUESTS
+  // ═══════════════════════════════════════
+
+  @Post('organizations/:orgId/join-request')
+  @ApiOperation({ summary: 'Create a join request for an organization' })
+  async createJoinRequest(
+    @Request() req: any,
+    @Param('orgId') orgId: string,
+    @Body() body: { message?: string; selectedStructure?: any; requestedPositionId?: string },
+  ) {
+    return this.entitiesService.createJoinRequest(req.user.id, orgId, body);
+  }
+
+  @Get('join-requests/me')
+  @ApiOperation({ summary: 'Get my join requests' })
+  async getMyJoinRequests(@Request() req: any) {
+    return this.entitiesService.getMyJoinRequests(req.user.id);
+  }
+
+  @Get('organizations/:orgId/join-requests')
+  @ApiOperation({ summary: 'Get join requests for an organization (admin only)' })
+  async getOrgJoinRequests(@Request() req: any, @Param('orgId') orgId: string) {
+    return this.entitiesService.getOrgJoinRequests(req.user.id, orgId);
+  }
+
+  @Post('join-requests/:id/review')
+  @ApiOperation({ summary: 'Approve or reject a join request' })
+  async reviewJoinRequest(
+    @Request() req: any,
+    @Param('id') id: string,
+    @Body() body: { action: 'approved' | 'rejected'; adminNotes?: string },
+  ) {
+    return this.entitiesService.reviewJoinRequest(req.user.id, id, body.action, body.adminNotes);
   }
 }

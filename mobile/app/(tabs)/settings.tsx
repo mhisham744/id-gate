@@ -53,6 +53,9 @@ export default function SettingsScreen() {
 
   const handleSettingsPress = (key: string) => {
     if (key === 'positions' && isPersonal) return;
+    if (key === 'positions') {
+      router.push('/positions');
+    }
     if (key === 'organizations') {
       router.push('/organizations');
     }

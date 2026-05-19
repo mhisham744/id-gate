@@ -31,6 +31,10 @@ export default function RootLayout() {
         <Stack.Screen name="organizations/index" />
         <Stack.Screen name="organizations/[id]" />
         <Stack.Screen name="organizations/add" />
+        <Stack.Screen name="organizations/join/[id]" />
+        <Stack.Screen name="positions/index" />
+        <Stack.Screen name="positions/[id]" />
+        <Stack.Screen name="positions/create" />
       </Stack>
     </QueryClientProvider>
   );

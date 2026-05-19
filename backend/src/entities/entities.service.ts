@@ -1,10 +1,12 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OrganizationEntity } from './entities/organization.entity';
 import { PositionEntity } from './entities/position.entity';
 import { OrgStructureNodeEntity } from './entities/org-structure-node.entity';
+import { JoinRequestEntity } from './entities/join-request.entity';
 import { UserEntity } from '../auth/entities/user.entity';
+import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable()
 export class EntitiesService {
@@ -15,8 +17,11 @@ export class EntitiesService {
     private positionRepo: Repository<PositionEntity>,
     @InjectRepository(OrgStructureNodeEntity)
     private structureNodeRepo: Repository<OrgStructureNodeEntity>,
+    @InjectRepository(JoinRequestEntity)
+    private joinRequestRepo: Repository<JoinRequestEntity>,
     @InjectRepository(UserEntity)
     private userRepo: Repository<UserEntity>,
+    private notificationsService: NotificationsService,
   ) {}
 
   // ═══════════════════════════════════════
@@ -111,6 +116,39 @@ export class EntitiesService {
     });
   }
 
+  async getAdminPositions(userId: string) {
+    // Get all orgs where user is admin, then all positions in those orgs
+    const orgs = await this.orgRepo
+      .createQueryBuilder('org')
+      .where("org.adminIds @> :userId", { userId: JSON.stringify([userId]) })
+      .getMany();
+
+    if (orgs.length === 0) return [];
+
+    const orgIds = orgs.map((o) => o.id);
+    return this.positionRepo
+      .createQueryBuilder('pos')
+      .leftJoinAndSelect('pos.organization', 'org')
+      .where('pos.organizationId IN (:...orgIds)', { orgIds })
+      .orderBy('org.commercialName', 'ASC')
+      .addOrderBy('pos.positionName', 'ASC')
+      .getMany();
+  }
+
+  async searchPersonalUsers(query: string) {
+    // Search users who are NOT organization accounts (personal users only)
+    return this.userRepo
+      .createQueryBuilder('u')
+      .select(['u.id', 'u.idCode', 'u.firstName', 'u.lastName', 'u.fullName', 'u.profilePhotoUrl', 'u.accountType'])
+      .where('u.accountType != :type', { type: 'organization' })
+      .andWhere(
+        '(LOWER(u.fullName) LIKE LOWER(:q) OR LOWER(u.firstName) LIKE LOWER(:q) OR LOWER(u.lastName) LIKE LOWER(:q) OR u.idCode = :exact OR u.phoneNumber = :exact)',
+        { q: `%${query}%`, exact: query },
+      )
+      .take(20)
+      .getMany();
+  }
+
   async getUserPositions(userId: string) {
     return this.positionRepo.find({
       where: { linkedNaturalId: userId, linkStatus: 'active' },
@@ -138,9 +176,31 @@ export class EntitiesService {
       throw new ForbiddenException('Position is already linked to someone');
     }
 
+    const sender = await this.userRepo.findOne({ where: { id: userId } });
+
     position.linkedNaturalId = personId;
     position.linkStatus = 'pending';
-    return this.positionRepo.save(position);
+    const saved = await this.positionRepo.save(position);
+
+    // Create notification for the target person
+    await this.notificationsService.createNotification({
+      recipientId: personId,
+      recipientType: 'natural',
+      type: 'position_link_request',
+      title: 'Position Link Request',
+      body: `${org.commercialName || org.formalName} wants to link you to the position "${position.positionName}"`,
+      senderId: userId,
+      senderName: sender?.fullName || 'Organization Admin',
+      senderType: 'natural',
+      data: {
+        positionId: position.id,
+        positionName: position.positionName,
+        organizationId: org.id,
+        organizationName: org.commercialName || org.formalName,
+      },
+    });
+
+    return saved;
   }
 
   async acceptPositionLink(userId: string, positionId: string) {
@@ -345,6 +405,75 @@ export class EntitiesService {
 
     return result;
   }
+
+  // ═══════════════════════════════════════
+  // JOIN REQUESTS
+  // ═══════════════════════════════════════
+
+  async createJoinRequest(userId: string, orgId: string, data: {
+    message?: string;
+    selectedStructure?: { organizational?: string; management?: string; function?: string; geographical?: string };
+    requestedPositionId?: string;
+  }) {
+    const org = await this.orgRepo.findOne({ where: { id: orgId } });
+    if (!org) throw new NotFoundException('Organization not found');
+
+    // Check for existing pending request
+    const existing = await this.joinRequestRepo.findOne({
+      where: { requesterId: userId, organizationId: orgId, status: 'pending' },
+    });
+    if (existing) throw new ConflictException('You already have a pending request for this organization');
+
+    const request = this.joinRequestRepo.create({
+      organizationId: orgId,
+      requesterId: userId,
+      message: data.message,
+      selectedStructure: data.selectedStructure || {},
+      requestedPositionId: data.requestedPositionId,
+      status: 'pending',
+    });
+    return this.joinRequestRepo.save(request);
+  }
+
+  async getMyJoinRequests(userId: string) {
+    return this.joinRequestRepo.find({
+      where: { requesterId: userId },
+      relations: ['organization'],
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  async getOrgJoinRequests(userId: string, orgId: string) {
+    const org = await this.orgRepo.findOne({ where: { id: orgId } });
+    if (!org) throw new NotFoundException('Organization not found');
+    if (!org.adminIds.includes(userId)) {
+      throw new ForbiddenException('Only admins can view join requests');
+    }
+    return this.joinRequestRepo.find({
+      where: { organizationId: orgId, status: 'pending' },
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  async reviewJoinRequest(userId: string, requestId: string, action: 'approved' | 'rejected', adminNotes?: string) {
+    const request = await this.joinRequestRepo.findOne({ where: { id: requestId } });
+    if (!request) throw new NotFoundException('Join request not found');
+
+    const org = await this.orgRepo.findOne({ where: { id: request.organizationId } });
+    if (!org || !org.adminIds.includes(userId)) {
+      throw new ForbiddenException('Only admins can review join requests');
+    }
+
+    request.status = action;
+    request.reviewedBy = userId;
+    request.reviewedAt = new Date();
+    if (adminNotes) request.adminNotes = adminNotes;
+    return this.joinRequestRepo.save(request);
+  }
+
+  // ═══════════════════════════════════════
+  // HELPERS
+  // ═══════════════════════════════════════
 
   private generateOrgIdCode(): string {
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';

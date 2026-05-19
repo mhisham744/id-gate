@@ -1,5 +1,5 @@
-const API_URL = process.env.EXPO_PUBLIC_API_URL || 'https://backend-production-2b386.up.railway.app/api/v1';
-const WS_URL = process.env.EXPO_PUBLIC_WS_URL || 'wss://backend-production-2b386.up.railway.app';
+const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3000/api/v1';
+const WS_URL = process.env.EXPO_PUBLIC_WS_URL || 'ws://localhost:3000';
 
 export const config = {
   api: {
